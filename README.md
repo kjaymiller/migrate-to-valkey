@@ -26,7 +26,7 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
 2. **Run an Interactive Session:**
    Drop into a bash session inside the container, mounting your `fnox` config:
    ```bash
-   docker run -it -v $(pwd)/fnox.toml:/app/fnox.toml vk-migrate bash
+   docker run -it -v $(pwd)/fnox.toml:/app/fnox.toml vk-migrate fnox exec -- bash
    ```
 
 3. **Run Tasks inside the Container:**
