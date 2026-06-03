@@ -13,10 +13,16 @@ We welcome contributions! If you'd like to help improve these migration tools, f
    ```bash
    uv sync
    ```
-3. Copy the configuration template and configure your connection strings:
+3. Copy the configuration template and configure your connection strings (defaults to `valkey://localhost:6379`):
    ```bash
    cp fnox.toml.example fnox.toml
    ```
+
+### Running the CLI Locally
+You can run the CLI tool locally using `uv`:
+```bash
+uv run vk_migrate --help
+```
 
 ### Running Tests
 We use standard Python unit tests located in the `tests/` directory.

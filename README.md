@@ -7,7 +7,7 @@ This project contains tools and instructions to help migrate data from Aiven for
 The easiest way to run the migration tools without installing Python, `mise`, or `valkey-cli` locally is via Docker.
 
 ### 1. Configuration
-Before running the container, you need to set up your source and target connection strings. We use `fnox` to manage these securely.
+By default, the tools will connect to a local Valkey/Redis instance at `valkey://localhost:6379`. If you are migrating real data, you will need to set up your remote source and target connection strings. We use `fnox` to manage these securely.
 
 1. Copy the example configuration file:
    ```bash
@@ -20,13 +20,13 @@ Before running the container, you need to set up your source and target connecti
 ### 2. Build and Run
 1. **Build the Docker Image:**
    ```bash
-   docker build -t df-valkey-migration .
+   docker build -t vk-migrate .
    ```
 
 2. **Run an Interactive Session:**
    Drop into a bash session inside the container, mounting your `fnox` config:
    ```bash
-   docker run -it -v $(pwd)/fnox.toml:/app/fnox.toml df-valkey-migration bash
+   docker run -it -v $(pwd)/fnox.toml:/app/fnox.toml vk-migrate bash
    ```
 
 3. **Run Tasks inside the Container:**
@@ -43,6 +43,12 @@ Before running the container, you need to set up your source and target connecti
 
    # List all available commands
    mise tasks
+   ```
+
+   Alternatively, you can use the CLI directly:
+   ```bash
+   uv run vk_migrate --help
+   uv run vk_migrate migration-check
    ```
 
 ## Contributing
