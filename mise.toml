@@ -9,23 +9,23 @@ TARGET_CONNECTION_STRING = "valkey://localhost:6379"
 
 [tasks.compare]
 description = "Run migration check (compares Source and Target)"
-run = "fnox exec -- uv run df-valkey-migration migration-check"
+run = "fnox exec -- uv run vk_migrate migration-check"
 
 [tasks.check]
 description = "Analyze the Source database to see if its data can be safely migrated to Valkey"
-run = "fnox exec -- uv run df-valkey-migration compatibility-check"
+run = "fnox exec -- uv run vk_migrate compatibility-check"
 
 [tasks.flush]
 description = "Flush a specific database by connection string (Usage: mise run flush <connection_string>)"
-run = "uv run df-valkey-migration flush"
+run = "uv run vk_migrate flush"
 
 [tasks."flush-all"]
 description = "Flush all data from both Source and Target databases"
-run = "fnox exec -- uv run df-valkey-migration flush-all"
+run = "fnox exec -- uv run vk_migrate flush-all"
 
 [tasks."load-passing"]
 description = "Load a passing dataset into Source"
-run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run df-valkey-migration load-fake-data --scenario passing'"
+run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run vk_migrate load-fake-data --scenario passing'"
 
 [tasks."check-passing"]
 description = "Load passing dataset and run migration check"
@@ -36,7 +36,7 @@ run = [
 
 [tasks."load-failing"]
 description = "Load a failing dataset (includes JSON) into Source"
-run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run df-valkey-migration load-fake-data --scenario failing'"
+run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run vk_migrate load-fake-data --scenario failing'"
 
 [tasks."check-failing"]
 description = "Load failing dataset and run migration check"
@@ -47,4 +47,4 @@ run = [
 
 [tasks.examine]
 description = "Examine all keys and their types extremely fast using Python pipelining"
-run = "fnox exec -- uv run df-valkey-migration examine"
+run = "fnox exec -- uv run vk_migrate examine"
