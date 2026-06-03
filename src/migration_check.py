@@ -2,55 +2,29 @@ import sys
 import click
 import valkey
 from valkey.exceptions import ConnectionError
-import urllib.parse
-import asyncio
-from glide import GlideClient, GlideClientConfiguration, NodeAddress, ServerCredentials
 
-async def get_version_via_glide(connection_string):
-    """Get the version of the service using valkey-glide."""
-    parsed = urllib.parse.urlparse(connection_string)
-    host = parsed.hostname
-    port = parsed.port or 6379
-    password = parsed.password
-    user = parsed.username
-    scheme = parsed.scheme
-
-    use_tls = scheme in ("valkeys", "rediss")
-    credentials = None
-    if user or password:
-        credentials = ServerCredentials(username=user, password=password)
-
-    config = GlideClientConfiguration(
-        addresses=[NodeAddress(host, port)],
-        use_tls=use_tls,
-        credentials=credentials
-    )
-
+def get_version(client, name="Instance"):
+    """Get the version of the service using valkey-py."""
     try:
-        client = await GlideClient.create(config)
-        info_bytes = await client.info()
-        await client.close()
+        info = client.info()
 
-        output = info_bytes.decode('utf-8', errors='ignore')
-        version = "unknown"
-        for line in output.splitlines():
-            line = line.strip()
-            if line.startswith("valkey_version:"):
-                return line.split(":")[1].strip()
-            elif line.startswith("dragonfly_version:"):
-                return line.split(":")[1].strip()
-            elif line.startswith("redis_version:") and version == "unknown":
-                version = line.split(":")[1].strip()
-        return version
+        # Determine version based on the info dictionary keys
+        if "valkey_version" in info:
+            return info["valkey_version"]
+        elif "dragonfly_version" in info:
+            return info["dragonfly_version"]
+        elif "redis_version" in info:
+            return info["redis_version"]
+        return "unknown"
     except Exception as e:
-        print(f"❌ Failed to connect to {host}:{port} via valkey-glide. Error: {e}")
+        print(f"❌ Failed to connect to {name} via valkey-py. Error: {e}")
         return "error"
 
-def check_versions(source_url, target_url):
-    """Fetch and compare versions of source and target using valkey-glide."""
-    print("Fetching versions via valkey-glide...")
-    source_version = asyncio.run(get_version_via_glide(source_url))
-    target_version = asyncio.run(get_version_via_glide(target_url))
+def check_versions(source_client, target_client):
+    """Fetch and compare versions of source and target using valkey-py."""
+    print("Fetching versions via valkey-py...")
+    source_version = get_version(source_client, "Source")
+    target_version = get_version(target_client, "Target")
 
     print("=== Version Check ===")
     print(f"Source (Dragonfly) Version: {source_version}")
@@ -149,7 +123,7 @@ def migration_check_cmd(source, target):
     target_client = valkey.from_url(target, decode_responses=True)
 
     # 1. Verify versions are compatible
-    check_versions(source, target)
+    check_versions(source_client, target_client)
 
     # 2. Scan schema (keys and types) from source to ensure it matches target
     scan_schema(source_client, target_client)
