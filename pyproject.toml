@@ -3,25 +3,15 @@ requires = ["setuptools>=61.0", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "df-valkey-migration"
+name = "valkey-migrate"
 dynamic = ["version"]
-description = "Tools and instructions to migrate from Aiven for Dragonfly to Aiven for Valkey"
+description = "Tools and instructions to migrate from Redis, Dragonfly to Valkey"
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = [
-    "click>=8.4.1",
-    "valkey>=6.1.1",
-    "valkey-glide>=2.4.1",
-]
+dependencies = ["click==8.4.1", "valkey==6.1.1"]
 
 [project.scripts]
-df-valkey-migration = "src.cli:cli"
+vk_migrate = "src.cli:cli"
 
 [tool.uv]
 package = true
-
-[tool.setuptools_scm]
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["src*"]
