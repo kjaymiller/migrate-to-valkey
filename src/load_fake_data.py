@@ -2,6 +2,7 @@ import click
 import valkey
 import json
 import logging
+import sys
 from valkey.exceptions import ConnectionError
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -78,7 +79,7 @@ def load_fake_data_cmd(target, scenario, force):
         client.ping()
     except ConnectionError as e:
         logging.error(f"❌ Connection error: {e}")
-        return
+        sys.exit(1)
 
     db_size = client.dbsize()
     if db_size > 0:
