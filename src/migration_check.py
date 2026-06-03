@@ -114,8 +114,8 @@ def scan_schema(source_client, target_client):
         print("✅ Success: Source and Target schemas match perfectly.")
 
 @click.command(help="Migration check tool: Dragonfly -> Valkey")
-@click.option("--source", default="valkey://localhost:6379", envvar="SOURCE_CONNECTION_STRING", help="Source connection string (e.g., valkey://user:pass@host:port)")
-@click.option("--target", default="valkey://localhost:6379", envvar="TARGET_CONNECTION_STRING", help="Target connection string (e.g., valkey://user:pass@host:port)")
+@click.option("--source", required=True, envvar="SOURCE_CONNECTION_STRING", help="Source connection string (e.g., valkey://user:pass@host:port)")
+@click.option("--target", required=True, envvar="TARGET_CONNECTION_STRING", help="Target connection string (e.g., valkey://user:pass@host:port)")
 def migration_check_cmd(source, target):
     print("Connecting to databases...")
     # Initialize Valkey clients. decode_responses=True ensures we work with strings instead of bytes.

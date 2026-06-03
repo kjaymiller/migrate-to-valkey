@@ -4,8 +4,11 @@ python.uv_venv_auto = "create|source"
 [env]
 _.path = ["./bin"]
 PYTHONPATH = "."
+SOURCE_CONNECTION_STRING = "{{ env.SOURCE_CONNECTION_STRING | default(value='valkey://localhost:6379') }}"
+TARGET_CONNECTION_STRING = "{{ env.TARGET_CONNECTION_STRING | default(value='valkey://localhost:6379') }}"
 
 [tasks.compare]
+
 description = "Run migration check (compares Source and Target)"
 run = "uv run vk_migrate migration-check"
 
@@ -23,7 +26,7 @@ run = "uv run vk_migrate flush-all"
 
 [tasks."load-passing"]
 description = "Load a passing dataset into Source"
-run = "bash -c 'TARGET_CONNECTION_STRING=\"${SOURCE_CONNECTION_STRING:-valkey://localhost:6379}\" uv run vk_migrate load-fake-data --scenario passing'"
+run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" --scenario passing"
 
 [tasks."check-passing"]
 description = "Load passing dataset and run migration check"
@@ -34,7 +37,7 @@ run = [
 
 [tasks."load-failing"]
 description = "Load a failing dataset (includes JSON) into Source"
-run = "bash -c 'TARGET_CONNECTION_STRING=\"${SOURCE_CONNECTION_STRING:-valkey://localhost:6379}\" uv run vk_migrate load-fake-data --scenario failing'"
+run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" --scenario failing"
 
 [tasks."check-failing"]
 description = "Load failing dataset and run migration check"

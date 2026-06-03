@@ -3,7 +3,7 @@ import valkey
 import sys
 
 @click.command(help="Analyze source database for migration compatibility")
-@click.option("--source", default="valkey://localhost:6379", envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
+@click.option("--source", required=True, envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
 def compatibility_check_cmd(source):
     print("Connecting to source database...")
     client = valkey.from_url(source, decode_responses=True)
