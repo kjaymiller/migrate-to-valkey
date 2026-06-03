@@ -7,6 +7,15 @@ PYTHONPATH = "."
 SOURCE_CONNECTION_STRING = "{{ env.SOURCE_CONNECTION_STRING | default(value='valkey://localhost:6379') }}"
 TARGET_CONNECTION_STRING = "{{ env.TARGET_CONNECTION_STRING | default(value='valkey://localhost:6379') }}"
 
+[tasks."start-server"]
+description = "Start the built-in Valkey server in the background (with modules loaded for testing)"
+run = """
+valkey-server --daemonize yes \
+  --loadmodule /usr/lib/valkey/libvalkey_bloom.so \
+  --loadmodule /usr/lib/valkey/libjson.so \
+  --loadmodule /usr/lib/valkey/libsearch.so
+"""
+
 [tasks.compare]
 
 description = "Run migration check (compares Source and Target)"
@@ -26,7 +35,7 @@ run = "uv run vk_migrate flush-all"
 
 [tasks."load-passing"]
 description = "Load a passing dataset into Source"
-run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" --scenario passing"
+run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" --scenario passing --force"
 
 [tasks."check-passing"]
 description = "Load passing dataset and run migration check"
@@ -37,7 +46,7 @@ run = [
 
 [tasks."load-failing"]
 description = "Load a failing dataset (includes JSON) into Source"
-run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" --scenario failing"
+run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" --scenario failing --force"
 
 [tasks."check-failing"]
 description = "Load failing dataset and run migration check"
