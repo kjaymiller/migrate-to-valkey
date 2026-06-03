@@ -4,7 +4,7 @@ import valkey
 import click
 
 @click.command(help="Examine source database keys and types")
-@click.option("--conn-str", envvar="SOURCE_CONNECTION_STRING", required=True, help="Connection string")
+@click.option("--conn-str", default="valkey://localhost:6379", envvar="SOURCE_CONNECTION_STRING", help="Connection string")
 def examine_cmd(conn_str):
     try:
         # Connect to the database

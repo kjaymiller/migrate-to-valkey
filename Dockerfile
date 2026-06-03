@@ -42,4 +42,8 @@ RUN mise trust /app/mise.toml
 # Ensure python virtual environment binaries are accessible
 ENV PATH="/app/.venv/bin:$PATH"
 
+# Default connection strings for local development
+ENV SOURCE_CONNECTION_STRING="valkey://localhost:6379"
+ENV TARGET_CONNECTION_STRING="valkey://localhost:6379"
+
 CMD ["bash"]

@@ -4,6 +4,8 @@ python.uv_venv_auto = "create|source"
 [env]
 _.path = ["./bin"]
 PYTHONPATH = "src"
+SOURCE_CONNECTION_STRING = "valkey://localhost:6379"
+TARGET_CONNECTION_STRING = "valkey://localhost:6379"
 
 [tasks.compare]
 description = "Run migration check (compares Source and Target)"

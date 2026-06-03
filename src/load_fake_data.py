@@ -67,7 +67,7 @@ def insert_extension_types(client):
         logging.warning(f"⚠️  Could not add Search data: {e} (Search module might not be enabled on the target)")
 
 @click.command(help="Load fake test data into a database to test migration scenarios.")
-@click.option("--target", required=True, envvar="TARGET_CONNECTION_STRING", help="Connection string (e.g., valkey://user:pass@host:port)")
+@click.option("--target", default="valkey://localhost:6379", envvar="TARGET_CONNECTION_STRING", help="Connection string (e.g., valkey://user:pass@host:port)")
 @click.option("--scenario", type=click.Choice(['passing', 'failing']), required=True, help="Scenario to generate (passing=only standard types, failing=includes extension types)")
 @click.option("--force", is_flag=True, help="Force flush existing data without confirmation.")
 def load_fake_data_cmd(target, scenario, force):

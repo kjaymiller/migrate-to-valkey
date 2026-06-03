@@ -7,8 +7,8 @@ import sys
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 @click.command(help="Logical migration tool: Dragonfly -> Valkey using DUMP/RESTORE")
-@click.option("--source", required=True, envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
-@click.option("--target", required=True, envvar="TARGET_CONNECTION_STRING", help="Target connection string")
+@click.option("--source", default="valkey://localhost:6379", envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
+@click.option("--target", default="valkey://localhost:6379", envvar="TARGET_CONNECTION_STRING", help="Target connection string")
 def migrate_data_cmd(source, target):
     logging.info("Connecting to databases...")
 

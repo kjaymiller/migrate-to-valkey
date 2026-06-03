@@ -7,5 +7,5 @@
 type = "plaintext"
 
 [secrets]
-TARGET_CONNECTION_STRING = { provider = "plaintext", value = "valkey://..." }
-SOURCE_CONNECTION_STRING = { provider = "plaintext", value = "valkey://..." }
+TARGET_CONNECTION_STRING = { provider = "plaintext", value = "valkey://localhost:6379" }
+SOURCE_CONNECTION_STRING = { provider = "plaintext", value = "valkey://localhost:6379" }

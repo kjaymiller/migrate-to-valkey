@@ -15,8 +15,8 @@ def flush_db(name, conn_str):
         print(f"❌ Error flushing {name}: {e}")
 
 @click.command(help="Flush both source and target databases")
-@click.option("--source", envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
-@click.option("--target", envvar="TARGET_CONNECTION_STRING", help="Target connection string")
+@click.option("--source", default="valkey://localhost:6379", envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
+@click.option("--target", default="valkey://localhost:6379", envvar="TARGET_CONNECTION_STRING", help="Target connection string")
 def flush_all_cmd(source, target):
     if not source and not target:
         print("Neither source nor target connection string are provided.")
