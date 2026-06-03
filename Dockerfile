@@ -1,4 +1,4 @@
-FROM valkey/valkey:alpine AS valkey
+FROM valkey/valkey:latest AS valkey
 
 FROM python:3.14-slim
 
