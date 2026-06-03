@@ -13,24 +13,9 @@ Before running the container, you need to set up your source and target connecti
    ```bash
    cp fnox.toml.example fnox.toml
    ```
-2. Edit `fnox.toml` and configure your `age` public key if you intend to use `age` encryption. If you prefer to store connection strings locally without encryption, you can change the provider type to `plaintext` in the file.
+2. Edit `fnox.toml` and configure your target and source connection strings. This file uses the `plaintext` provider by default for local development. *(Note: `fnox.toml` is and should remain in your `.gitignore` to prevent committing secrets).*
 
-3. Load your environment variables into `fnox`. If you have a `.env` file containing your connection strings:
-   ```env
-   SOURCE_CONNECTION_STRING=valkey://...
-   TARGET_CONNECTION_STRING=valkey://...
-   ```
-   You can import them directly into `fnox`:
-   ```bash
-   fnox import --provider age --input .env
-   ```
-   *(Note: change `--provider age` to `--provider plaintext` if you updated your config in step 2)*
-
-   Alternatively, you can set them one-by-one interactively, which will prompt you for the values without echoing them:
-   ```bash
-   fnox set SOURCE_CONNECTION_STRING
-   fnox set TARGET_CONNECTION_STRING
-   ```
+3. If you have an existing `.env` file or wish to set values interactively, you can import them using the `fnox` CLI. For detailed instructions on importing and managing secrets, refer to the [fnox documentation](https://fnox.jdx.dev/).
 
 ### 2. Build and Run
 1. **Build the Docker Image:**

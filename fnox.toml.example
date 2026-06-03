@@ -1,13 +1,11 @@
-# To use age encryption, keep the [providers.age] section and configure your key.
-# If you prefer no encryption locally, remove it and add:
-# [providers.plaintext]
-# type = "plaintext"
+# fnox.toml
+# This file configures the connection strings for the migration tools.
+# NOTE: The actual `fnox.toml` path is gitignored to keep your secrets safe locally.
+# We default to plaintext for ease of use, but you can configure age/SOPS encryption if desired.
 
-[providers.age]
-type = "age"
-recipients = ["your_age_public_key_here"]
+[providers.plaintext]
+type = "plaintext"
 
 [secrets]
-# When using `fnox import` or `fnox set`, secrets will automatically be added/updated below.
-TARGET_CONNECTION_STRING = { provider = "age", value = "encrypted_value_here" }
-SOURCE_CONNECTION_STRING = { provider = "age", value = "encrypted_value_here" }
+TARGET_CONNECTION_STRING = { provider = "plaintext", value = "valkey://..." }
+SOURCE_CONNECTION_STRING = { provider = "plaintext", value = "valkey://..." }
