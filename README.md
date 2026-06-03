@@ -1,6 +1,6 @@
 # Dragonfly to Valkey Migration Project
 
-This project contains tools and instructions to help migrate data from Aiven for Dragonfly to Aiven for Valkey.
+This project contains tools and instructions to help migrate data from Dragonfly to Valkey.
 
 ## Quick Start (Using Docker)
 
@@ -33,8 +33,8 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
 3. **Run Tasks inside the Container:**
    You can now execute `mise` tasks such as running checks or loading data:
    ```bash
-   # Start the built-in Valkey server in the background (optional, for testing without external databases)
-   valkey-server --daemonize yes
+   # Start the built-in Valkey server in the background (with modules loaded for testing)
+   mise run start-server
 
    # Load a sample passing dataset and run the migration check
    mise run check-passing

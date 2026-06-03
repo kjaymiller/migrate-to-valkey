@@ -43,7 +43,7 @@ def insert_standard_types(client):
         # Bloom Filter via RedisBloom commands (BF.ADD)
         client.execute_command("BF.ADD", "bf:usernames", "alice")
         client.execute_command("BF.ADD", "bf:usernames", "bob")
-        logging.info("✅ Added Bloom Filter data (supported by Aiven for Valkey).")
+        logging.info("✅ Added Bloom Filter data (supported by Valkey).")
     except Exception as e:
         logging.warning(f"⚠️  Could not add Bloom Filter data: {e} (Bloom module might not be enabled on the target)")
 

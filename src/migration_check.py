@@ -82,7 +82,7 @@ def scan_schema(source_client, target_client):
             indices = source_client.execute_command("FT._LIST")
             if indices:
                 print("\n⚠️  NOTE: Search Indices Detected!")
-                print("Dragonfly supports FT.SEARCH, but Aiven for Valkey does not currently support RediSearch.")
+                print("Dragonfly supports FT.SEARCH, but Valkey does not currently support RediSearch.")
                 print(f"Indices found: {', '.join(indices)}")
                 return True
         except Exception:
@@ -99,7 +99,7 @@ def scan_schema(source_client, target_client):
 
     if extension_type_counts:
         print("\n⚠️  NOTE: Extension Data Types Detected!")
-        print("Aiven for Valkey supports the JSON module natively, but double check compatibility.")
+        print("Valkey supports the JSON module natively, but double check compatibility.")
         for ext_type, count in extension_type_counts.items():
             print(f"  - {ext_type}: {count} keys")
 

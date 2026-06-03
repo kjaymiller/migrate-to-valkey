@@ -54,7 +54,7 @@ def compatibility_check_cmd(source):
     if non_standard:
         # Check if the non-standard types include MBbloom-- (Bloom Filter)
         if "MBbloom--" in non_standard:
-            print("ℹ️  Note: Bloom Filters (MBbloom--) detected. These require the RedisBloom module (supported by Aiven for Valkey).")
+            print("ℹ️  Note: Bloom Filters (MBbloom--) detected. These require the RedisBloom module (supported by Valkey).")
             non_standard.remove("MBbloom--")
 
         if non_standard:

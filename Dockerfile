@@ -1,4 +1,4 @@
-FROM valkey/valkey:latest AS valkey
+FROM valkey/valkey-bundle:latest AS valkey
 
 FROM python:3.14-slim
 
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
 # Copy valkey-cli and valkey-server from the official image so they're available locally
 COPY --from=valkey /usr/local/bin/valkey-cli /usr/local/bin/valkey-cli
 COPY --from=valkey /usr/local/bin/valkey-server /usr/local/bin/valkey-server
+COPY --from=valkey /usr/lib/valkey/*.so /usr/lib/valkey/
 
 # Install uv for fast Python package management
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/local/bin" sh
