@@ -28,6 +28,7 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
    ```bash
    docker run -it -v $(pwd)/fnox.toml:/app/fnox.toml vk-migrate fnox exec -- bash
    ```
+   *(Note: If you just want to test locally and don't care about `fnox.toml`, you can simply run `docker run -it vk-migrate bash`)*
 
 3. **Run Tasks inside the Container:**
    You can now execute `mise` tasks such as running checks or loading data:
@@ -35,14 +36,14 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
    # Start the built-in Valkey server in the background (optional, for testing without external databases)
    valkey-server --daemonize yes
 
+   # Load a sample passing dataset and run the migration check
+   mise run check-passing
+
+   # Load a sample failing dataset and run the migration check
+   mise run check-failing
+
    # Check if source data is compatible with Valkey
    mise run check
-
-   # Load a sample passing dataset into the source
-   mise run load-passing
-
-   # Compare the data between source and target
-   mise run compare
 
    # List all available commands
    mise tasks
