@@ -3,5 +3,4 @@ __pycache__
 *.pyc
 .git
 logs/
-.DS_Store.DS_Store
-__pycache__
+.DS_Store

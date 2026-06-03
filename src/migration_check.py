@@ -25,12 +25,12 @@ async def get_version_via_glide(connection_string):
         use_tls=use_tls,
         credentials=credentials
     )
-    
+
     try:
         client = await GlideClient.create(config)
         info_bytes = await client.info()
         await client.close()
-        
+
         output = info_bytes.decode('utf-8', errors='ignore')
         version = "unknown"
         for line in output.splitlines():
@@ -55,35 +55,35 @@ def check_versions(source_url, target_url):
     print("=== Version Check ===")
     print(f"Source (Dragonfly) Version: {source_version}")
     print(f"Target (Valkey) Version:    {target_version}")
-    
+
     if source_version == "error" or target_version == "error":
         print("❌ Status: Could not determine versions.")
         sys.exit(1)
-        
+
     print("✅ Status: Versions fetched successfully.")
     print("=====================\n")
 
 def scan_schema(source_client, target_client):
     """Scan keys and their types from source and check against target."""
     print("=== Schema Scan ===")
-    
+
     cursor = '0'
     matched_count = 0
     missing_count = 0
     mismatch_count = 0
     total_keys = 0
-    
+
     # Track non-standard types that might indicate use of Dragonfly extensions (JSON, Search, TimeSeries)
     standard_types = {"string", "list", "set", "zset", "hash", "stream", "none"}
     extension_type_counts = {}
 
     while cursor != 0:
         cursor, keys = source_client.scan(cursor=cursor, match='*', count=1000)
-        
+
         for key in keys:
             total_keys += 1
             source_type = source_client.type(key)
-            
+
             # Log extension types
             if source_type not in standard_types:
                 extension_type_counts[source_type] = extension_type_counts.get(source_type, 0) + 1
@@ -122,15 +122,15 @@ def scan_schema(source_client, target_client):
     print(f"Matching keys:      {matched_count}")
     print(f"Missing keys:       {missing_count}")
     print(f"Type mismatches:    {mismatch_count}")
-    
+
     if extension_type_counts:
         print("\n⚠️  NOTE: Extension Data Types Detected!")
         print("Aiven for Valkey supports the JSON module natively, but double check compatibility.")
         for ext_type, count in extension_type_counts.items():
             print(f"  - {ext_type}: {count} keys")
-    
+
     print("-------------------------------")
-    
+
     if missing_count > 0 or mismatch_count > 0:
         print("❌ Schema validation failed: Mismatches found between Source and Target.")
         sys.exit(1)
@@ -142,7 +142,7 @@ def scan_schema(source_client, target_client):
 @click.command(help="Migration check tool: Dragonfly -> Valkey")
 @click.option("--source", required=True, envvar="SOURCE_CONNECTION_STRING", help="Source connection string (e.g., valkey://user:pass@host:port)")
 @click.option("--target", required=True, envvar="TARGET_CONNECTION_STRING", help="Target connection string (e.g., valkey://user:pass@host:port)")
-def main(source, target):
+def migration_check_cmd(source, target):
     print("Connecting to databases...")
     # Initialize Valkey clients. decode_responses=True ensures we work with strings instead of bytes.
     source_client = valkey.from_url(source, decode_responses=True)
@@ -150,9 +150,9 @@ def main(source, target):
 
     # 1. Verify versions are compatible
     check_versions(source, target)
-    
+
     # 2. Scan schema (keys and types) from source to ensure it matches target
     scan_schema(source_client, target_client)
 
 if __name__ == "__main__":
-    main()
+    migration_check_cmd()

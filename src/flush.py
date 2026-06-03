@@ -4,7 +4,7 @@ import sys
 
 @click.command(help="Flush all data from a specific database by connection string")
 @click.argument("connection_string", required=True)
-def main(connection_string):
+def flush_cmd(connection_string):
     try:
         client = valkey.from_url(connection_string)
         client.flushall()
@@ -14,4 +14,4 @@ def main(connection_string):
         sys.exit(1)
 
 if __name__ == "__main__":
-    main()
+    flush_cmd()

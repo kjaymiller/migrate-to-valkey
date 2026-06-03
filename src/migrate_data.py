@@ -9,13 +9,13 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 @click.command(help="Logical migration tool: Dragonfly -> Valkey using DUMP/RESTORE")
 @click.option("--source", required=True, envvar="SOURCE_CONNECTION_STRING", help="Source connection string")
 @click.option("--target", required=True, envvar="TARGET_CONNECTION_STRING", help="Target connection string")
-def main(source, target):
+def migrate_data_cmd(source, target):
     logging.info("Connecting to databases...")
-    
+
     try:
         source_client = valkey.from_url(source)
         target_client = valkey.from_url(target)
-        
+
         # Test connections
         source_client.ping()
         target_client.ping()
@@ -24,7 +24,7 @@ def main(source, target):
         sys.exit(1)
 
     logging.info("Starting logical migration (SCAN -> DUMP -> RESTORE)...")
-    
+
     migrated_count = 0
     error_count = 0
     batch_size = 1000
@@ -40,7 +40,7 @@ def main(source, target):
         for k in keys:
             source_pipe.dump(k)
             source_pipe.pttl(k)
-        
+
         try:
             source_results = source_pipe.execute()
         except Exception as e:
@@ -54,13 +54,13 @@ def main(source, target):
         for i, k in enumerate(keys):
             dump_data = source_results[i*2]
             pttl = source_results[i*2 + 1]
-            
+
             if dump_data is None:
                 continue  # Key disappeared between SCAN and DUMP
-                
+
             if pttl < 0:
                 pttl = 0
-                
+
             target_pipe.restore(k, pttl, dump_data, replace=True)
             valid_keys += 1
 
@@ -75,12 +75,12 @@ def main(source, target):
                 for i, k in enumerate(keys):
                     dump_data = source_results[i*2]
                     pttl = source_results[i*2 + 1]
-                    
+
                     if dump_data is None:
                         continue
                     if pttl < 0:
                         pttl = 0
-                        
+
                     try:
                         target_client.restore(k, pttl, dump_data, replace=True)
                         migrated_count += 1
@@ -95,7 +95,7 @@ def main(source, target):
             flush_batch(keys_batch)
             keys_batch = []
             logging.info(f"Progress: Processed {migrated_count + error_count} keys...")
-            
+
     # Flush any remaining keys
     if keys_batch:
         flush_batch(keys_batch)
@@ -107,4 +107,4 @@ def main(source, target):
         logging.info(f"❌ Failed to migrate keys: {error_count}")
 
 if __name__ == "__main__":
-    main()
+    migrate_data_cmd()

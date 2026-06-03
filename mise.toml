@@ -7,23 +7,23 @@ PYTHONPATH = "src"
 
 [tasks.compare]
 description = "Run migration check (compares Source and Target)"
-run = "fnox exec -- uv run src/migration_check.py"
+run = "fnox exec -- uv run df-valkey-migration migration-check"
 
 [tasks.check]
 description = "Analyze the Source database to see if its data can be safely migrated to Valkey"
-run = "fnox exec -- uv run python src/compatibility_check.py"
+run = "fnox exec -- uv run df-valkey-migration compatibility-check"
 
 [tasks.flush]
 description = "Flush a specific database by connection string (Usage: mise run flush <connection_string>)"
-run = "uv run python src/flush.py"
+run = "uv run df-valkey-migration flush"
 
 [tasks."flush-all"]
 description = "Flush all data from both Source and Target databases"
-run = "fnox exec -- uv run python src/flush_all.py"
+run = "fnox exec -- uv run df-valkey-migration flush-all"
 
 [tasks."load-passing"]
 description = "Load a passing dataset into Source"
-run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run src/load_fake_data.py --scenario passing'"
+run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run df-valkey-migration load-fake-data --scenario passing'"
 
 [tasks."check-passing"]
 description = "Load passing dataset and run migration check"
@@ -34,7 +34,7 @@ run = [
 
 [tasks."load-failing"]
 description = "Load a failing dataset (includes JSON) into Source"
-run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run src/load_fake_data.py --scenario failing'"
+run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run df-valkey-migration load-fake-data --scenario failing'"
 
 [tasks."check-failing"]
 description = "Load failing dataset and run migration check"
@@ -45,4 +45,4 @@ run = [
 
 [tasks.examine]
 description = "Examine all keys and their types extremely fast using Python pipelining"
-run = "fnox exec -- uv run python src/examine.py"
+run = "fnox exec -- uv run df-valkey-migration examine"
