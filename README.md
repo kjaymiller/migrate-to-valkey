@@ -32,6 +32,9 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
 3. **Run Tasks inside the Container:**
    You can now execute `mise` tasks such as running checks or loading data:
    ```bash
+   # Start the built-in Valkey server in the background (optional, for testing without external databases)
+   valkey-server --daemonize yes
+
    # Check if source data is compatible with Valkey
    mise run check
 

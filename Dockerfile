@@ -12,8 +12,9 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy valkey-cli from the official image so it's available locally
+# Copy valkey-cli and valkey-server from the official image so they're available locally
 COPY --from=valkey /usr/local/bin/valkey-cli /usr/local/bin/valkey-cli
+COPY --from=valkey /usr/local/bin/valkey-server /usr/local/bin/valkey-server
 
 # Install uv for fast Python package management
 RUN curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR="/usr/local/bin" sh
@@ -31,7 +32,7 @@ WORKDIR /app
 COPY . /app
 
 # Remove the wrapper script since we have the binary installed natively in the container
-RUN rm -f /app/bin/valkey-cli
+RUN rm -f /app/bin/valkey-cli || true
 
 # Install project dependencies
 RUN uv sync --frozen
