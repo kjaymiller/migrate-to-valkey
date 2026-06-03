@@ -1,0 +1,48 @@
+[settings]
+python.uv_venv_auto = "create|source"
+
+[env]
+_.path = ["./bin"]
+PYTHONPATH = "src"
+
+[tasks.compare]
+description = "Run migration check (compares Source and Target)"
+run = "fnox exec -- uv run src/migration_check.py"
+
+[tasks.check]
+description = "Analyze the Source database to see if its data can be safely migrated to Valkey"
+run = "fnox exec -- uv run python src/compatibility_check.py"
+
+[tasks.flush]
+description = "Flush a specific database by connection string (Usage: mise run flush <connection_string>)"
+run = "uv run python src/flush.py"
+
+[tasks."flush-all"]
+description = "Flush all data from both Source and Target databases"
+run = "fnox exec -- uv run python src/flush_all.py"
+
+[tasks."load-passing"]
+description = "Load a passing dataset into Source"
+run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run src/load_fake_data.py --scenario passing'"
+
+[tasks."check-passing"]
+description = "Load passing dataset and run migration check"
+run = [
+    "mise run load-passing",
+    "mise run compare"
+]
+
+[tasks."load-failing"]
+description = "Load a failing dataset (includes JSON) into Source"
+run = "fnox exec -- bash -c 'TARGET_CONNECTION_STRING=\"$SOURCE_CONNECTION_STRING\" uv run src/load_fake_data.py --scenario failing'"
+
+[tasks."check-failing"]
+description = "Load failing dataset and run migration check"
+run = [
+    "mise run load-failing",
+    "mise run compare"
+]
+
+[tasks.examine]
+description = "Examine all keys and their types extremely fast using Python pipelining"
+run = "fnox exec -- uv run python src/examine.py"

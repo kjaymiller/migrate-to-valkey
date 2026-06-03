@@ -1,0 +1,7 @@
+[providers.age]
+type = "age"
+recipients = ["your_age_public_key_here"]
+
+[secrets]
+TARGET_CONNECTION_STRING= { provider = "age", value = "encrypted_value_here" }
+SOURCE_CONNECTION_STRING= { provider = "age", value = "encrypted_value_here" }

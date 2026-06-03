@@ -1,0 +1,11 @@
+[project]
+name = "df-valkey-migration"
+version = "0.1.0"
+description = "Tools and instructions to migrate from Aiven for Dragonfly to Aiven for Valkey"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "click>=8.4.1",
+    "valkey>=6.1.1",
+    "valkey-glide>=2.4.1",
+]
