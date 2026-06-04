@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "valkey-migrate"
 dynamic = ["version"]
-description = "Tools and instructions to migrate from Redis, Dragonfly to Valkey"
+description = "Tools and instructions to migrate between Redis-compatible databases (e.g., Redis/Dragonfly to Valkey)"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = ["click==8.4.1", "valkey==6.1.1"]

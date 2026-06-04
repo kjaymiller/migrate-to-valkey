@@ -27,8 +27,8 @@ def check_versions(source_client, target_client):
     target_version = get_version(target_client, "Target")
 
     print("=== Version Check ===")
-    print(f"Source (Dragonfly) Version: {source_version}")
-    print(f"Target (Valkey) Version:    {target_version}")
+    print(f"Source Version: {source_version}")
+    print(f"Target Version: {target_version}")
 
     if source_version == "error" or target_version == "error":
         print("❌ Status: Could not determine versions.")
@@ -47,7 +47,7 @@ def scan_schema(source_client, target_client):
     mismatch_count = 0
     total_keys = 0
 
-    # Track non-standard types that might indicate use of Dragonfly extensions (JSON, Search, TimeSeries)
+    # Track non-standard types that might indicate use of source extensions (JSON, Search, TimeSeries)
     standard_types = {"string", "list", "set", "zset", "hash", "stream", "none"}
     extension_type_counts = {}
 
@@ -77,12 +77,12 @@ def scan_schema(source_client, target_client):
                 matched_count += 1
 
     def check_search_indices():
-        """Check for RediSearch indices on Dragonfly."""
+        """Check for RediSearch indices on Source."""
         try:
             indices = source_client.execute_command("FT._LIST")
             if indices:
                 print("\n⚠️  NOTE: Search Indices Detected!")
-                print("Dragonfly supports FT.SEARCH, but Valkey does not currently support RediSearch.")
+                print("Source supports FT.SEARCH, but Target may not support RediSearch.")
                 print(f"Indices found: {', '.join(indices)}")
                 return True
         except Exception:
@@ -113,7 +113,7 @@ def scan_schema(source_client, target_client):
     else:
         print("✅ Success: Source and Target schemas match perfectly.")
 
-@click.command(help="Migration check tool: Dragonfly -> Valkey")
+@click.command(help="Migration check tool: Source -> Target")
 @click.option("--source", required=True, envvar="SOURCE_CONNECTION_STRING", help="Source connection string (e.g., valkey://user:pass@host:port)")
 @click.option("--target", required=True, envvar="TARGET_CONNECTION_STRING", help="Target connection string (e.g., valkey://user:pass@host:port)")
 def migration_check_cmd(source, target):

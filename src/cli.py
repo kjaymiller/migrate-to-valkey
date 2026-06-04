@@ -10,7 +10,7 @@ from .migration_check import migration_check_cmd
 
 @click.group()
 def cli():
-    """Tools and instructions to migrate from Dragonfly to Valkey"""
+    """Tools and instructions to migrate between Redis-compatible databases (e.g., Dragonfly/Redis to Valkey)"""
     pass
 
 cli.add_command(compatibility_check_cmd, name="compatibility-check")

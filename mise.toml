@@ -22,7 +22,7 @@ description = "Run migration check (compares Source and Target)"
 run = "uv run vk_migrate migration-check"
 
 [tasks.check]
-description = "Analyze the Source database to see if its data can be safely migrated to Valkey"
+description = "Analyze the Source database to see if its data can be safely migrated to Target"
 run = "uv run vk_migrate compatibility-check"
 
 [tasks.flush]

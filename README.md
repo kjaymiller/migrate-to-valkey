@@ -1,6 +1,6 @@
-# Dragonfly to Valkey Migration Project
+# Database Migration Project
 
-This project contains tools and instructions to help migrate data from Dragonfly to Valkey.
+This project contains tools and instructions to help migrate data from Redis or Dragonfly to Valkey (or between any Redis-compatible databases).
 
 ## Quick Start (Using Docker)
 
@@ -42,7 +42,7 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
    # Load a sample failing dataset and run the migration check
    mise run check-failing
 
-   # Check if source data is compatible with Valkey
+   # Check if source data is compatible with Target (Valkey)
    mise run check
 
    # Run the migration check (compares Source and Target)
