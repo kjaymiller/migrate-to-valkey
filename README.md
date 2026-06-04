@@ -45,6 +45,9 @@ By default, the tools will connect to a local Valkey/Redis instance at `valkey:/
    # Check if source data is compatible with Valkey
    mise run check
 
+   # Run the migration check (compares Source and Target)
+   mise run compare
+
    # List all available commands
    mise tasks
    ```
