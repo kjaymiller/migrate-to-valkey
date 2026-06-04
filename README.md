@@ -1,34 +1,32 @@
-# Database Migration Project
+# Migration to Valkey Project
 
-This project contains tools and instructions to help migrate data from Redis or Dragonfly to Valkey (or between any Redis-compatible databases).
+This project contains tools and instructions to help migrate data from Redis or Dragonfly (or between any Redis-compatible databases) to Valkey .
 
 ## Quick Start (Using Docker)
 
 The easiest way to run the migration tools without installing Python, `mise`, or `valkey-cli` locally is via Docker.
 
 ### 1. Configuration
-By default, the tools will connect to a local Valkey/Redis instance at `valkey://localhost:6379`. If you are migrating real data, you will need to set up your remote source and target connection strings. We use `fnox` to manage these securely.
+By default, the tools will connect to a local Valkey/Redis instance at `valkey://localhost:6379`. If you are migrating real data, you will need to set up your remote source and target connection strings.
 
-1. Copy the example configuration file:
-   ```bash
-   cp fnox.toml.example fnox.toml
-   ```
-2. Edit `fnox.toml` and configure your target and source connection strings. This file uses the `plaintext` provider by default for local development. *(Note: `fnox.toml` is and should remain in your `.gitignore` to prevent committing secrets).*
+The dockerfile is looking for `SOURCE_CONNECTION_STRING` and `TARGET_CONNECTION_STRING`. Otherwise, it will assume that a local valkey instance (included in the image) is both the source and the target. You can provide them in when you build your Docker instance. Alternatively, you can supply the connection strings directly when running any of the commands.
 
-3. If you have an existing `.env` file or wish to set values interactively, you can import them using the `fnox` CLI. For detailed instructions on importing and managing secrets, refer to the [fnox documentation](https://fnox.jdx.dev/).
 
 ### 2. Build and Run
 1. **Build the Docker Image:**
    ```bash
-   docker build -t vk-migrate .
+   docker build \
+     --build-arg SOURCE_CONNECTION_STRING="valkey://user:pass@source:6379" \
+     --build-arg TARGET_CONNECTION_STRING="valkey://user:pass@target:6379" \
+     -t vk-migrate .
    ```
 
 2. **Run an Interactive Session:**
-   Drop into a bash session inside the container, mounting your `fnox` config:
+   Drop into a bash session inside the container.
+
    ```bash
-   docker run -it -v $(pwd)/fnox.toml:/app/fnox.toml vk-migrate fnox exec -- bash
+   docker run -it vk-migrate bash
    ```
-   *(Note: If you just want to test locally and don't care about `fnox.toml`, you can simply run `docker run -it vk-migrate bash`)*
 
 3. **Run Tasks inside the Container:**
    You can now execute `mise` tasks such as running checks or loading data:

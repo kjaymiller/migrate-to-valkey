@@ -45,7 +45,10 @@ RUN mise trust /app/mise.toml
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Default connection strings for local development
-ENV SOURCE_CONNECTION_STRING="valkey://localhost:6379"
-ENV TARGET_CONNECTION_STRING="valkey://localhost:6379"
+ARG SOURCE_CONNECTION_STRING="valkey://localhost:6379"
+ARG TARGET_CONNECTION_STRING="valkey://localhost:6379"
+
+ENV SOURCE_CONNECTION_STRING=${SOURCE_CONNECTION_STRING}
+ENV TARGET_CONNECTION_STRING=${TARGET_CONNECTION_STRING}
 
 CMD ["bash"]
