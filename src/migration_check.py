@@ -82,7 +82,7 @@ def scan_schema(source_client, target_client):
             indices = source_client.execute_command("FT._LIST")
             if indices:
                 print("\n⚠️  NOTE: Search Indices Detected!")
-                print("Source supports FT.SEARCH, but Target may not support RediSearch.")
+                print("Indices are not keys, so DUMP/RESTORE does not copy them; recreate them on the target.")
                 print(f"Indices found: {', '.join(indices)}")
                 return True
         except Exception:

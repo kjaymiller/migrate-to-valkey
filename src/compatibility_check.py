@@ -61,7 +61,7 @@ def compatibility_check_cmd(source):
             warnings.append(f"Extension Data Types Detected: {', '.join(non_standard)}. Ensure your target Valkey instance supports these (e.g. via the JSON module).")
 
     if has_search:
-        warnings.append(f"Search Indices Detected ({', '.join(search_indices)}). Many Valkey providers (including Aiven) do not currently support RediSearch.")
+        warnings.append(f"Search Indices Detected ({', '.join(search_indices)}). Indices are not keys, so they are not copied by DUMP/RESTORE; recreate them on the target. Aiven supports FT.SEARCH on Valkey 9+.")
 
     print("\n=== Compatibility Result ===")
     if not warnings and total_keys > 0:

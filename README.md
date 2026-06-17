@@ -2,6 +2,33 @@
 
 This project contains tools and instructions to help migrate data from Redis or Dragonfly (or between any Redis-compatible databases) to Valkey .
 
+## Quick Migration Guide
+
+Use this table to gauge what will migrate cleanly before you start. The `mise run check` task scans your source database and flags anything in the last two categories.
+
+| Data type / feature | Status | Notes |
+| --- | --- | --- |
+| String | ✅ Works | Core type, no modules needed |
+| List | ✅ Works | Core type |
+| Set | ✅ Works | Core type |
+| Sorted Set (`zset`) | ✅ Works | Core type |
+| Hash | ✅ Works | Core type |
+| Stream | ✅ Works | Core type |
+| HyperLogLog | ✅ Works | Stored as strings |
+| Geospatial (GEO) | ✅ Works | Backed by sorted sets |
+| Bitmaps | ✅ Works | Backed by strings |
+| JSON (`JSON.*`) | 🧩 Needs module | Requires the JSON module on the target Valkey instance |
+| Bloom Filter (`BF.*`, `MBbloom--`) | 🧩 Needs module | Requires the RedisBloom module on the target Valkey instance |
+| Search indices (RediSearch / `FT.SEARCH`) | 🧩 Recreate indices | Aiven supports `FT.SEARCH` on Valkey 9+, but indices are not keys, so `DUMP`/`RESTORE` migrates the underlying hashes only — recreate the indices on the target |
+
+**Legend:** ✅ migrates with no extra setup · 🧩 migrates only if the matching module is enabled (or the index is recreated) on the target.
+
+Run the compatibility check below to see which of these apply to your data:
+
+```bash
+mise run check
+```
+
 ## Quick Start (Using Docker)
 
 The easiest way to run the migration tools without installing Python, `mise`, or `valkey-cli` locally is via Docker.
