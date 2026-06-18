@@ -39,10 +39,7 @@ run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" -
 
 [tasks."check-passing"]
 description = "Load passing dataset and run migration check"
-run = [
-    "mise run load-passing",
-    "mise run compare"
-]
+run = ["mise run load-passing", "mise run compare"]
 
 [tasks."load-failing"]
 description = "Load a failing dataset (includes JSON) into Source"
@@ -50,10 +47,7 @@ run = "uv run vk_migrate load-fake-data --target \"$SOURCE_CONNECTION_STRING\" -
 
 [tasks."check-failing"]
 description = "Load failing dataset and run migration check"
-run = [
-    "mise run load-failing",
-    "mise run compare"
-]
+run = ["mise run load-failing", "mise run compare"]
 
 [tasks.examine]
 description = "Examine all keys and their types extremely fast using Python pipelining"
